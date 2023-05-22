@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Identity.Client;
 using Parcial.DAL;
 using Parcial.DAL.Entities;
 
@@ -62,11 +64,13 @@ namespace Parcial.Controllers
         [Route("Get/{id}")]
         public async Task<ActionResult<Ticket>> GetTicketById(Guid? id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            var ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            if (ticketId == null) return Ok("Boleta no válida");
+            ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id && c.IsUsed ==true);
+            if (ticketId != null) return Ok("Boleta ya usada" + ticketId.ToString());
+            //  ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id && c.IsUsed == false);
 
-            if (ticket == null) return NotFound();
-
-            return Ok(ticket);
+            return Ok("Boleta válida, puede ingresar al concierto" + ticketId.ToString());
         }
     }
 }
