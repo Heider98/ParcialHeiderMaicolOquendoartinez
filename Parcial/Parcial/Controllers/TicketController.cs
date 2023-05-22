@@ -65,12 +65,12 @@ namespace Parcial.Controllers
         public async Task<ActionResult<Ticket>> GetTicketById(Guid? id)
         {
             var ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
-            if (ticketId == null) return Ok("Boleta no válida");
-            ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id && c.IsUsed ==true);
-            if (ticketId != null) return Ok("Boleta ya usada" + ticketId.ToString());
+            if (ticketId == null) return NotFound();
+           // ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id && c.IsUsed ==true);
+           // if (ticketId != null) return Ok(ticketId);
             //  ticketId = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id && c.IsUsed == false);
 
-            return Ok("Boleta válida, puede ingresar al concierto" + ticketId.ToString());
+            return Ok(ticketId);
         }
     }
 }

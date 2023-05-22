@@ -5,6 +5,7 @@ namespace Parcial.DAL.Entities
     public class Ticket
     {
         [Key]
+        [Display(Name = "Id boleta")]
         public Guid Id { get; set; }
 
         [Display(Name = "Fecha de uso")]
